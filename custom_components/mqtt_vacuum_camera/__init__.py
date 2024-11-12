@@ -1,5 +1,5 @@
 """MQTT Vacuum Camera.
-Version: 2024.10.0"""
+Version: 2024.11.0"""
 
 import logging
 import os
@@ -19,6 +19,8 @@ from homeassistant.helpers.reload import async_register_admin_service
 from homeassistant.helpers.storage import STORAGE_DIR
 
 from .common import (
+    generate_service_data_clean_zone,
+    generate_service_data_go_to,
     get_vacuum_device_info,
     get_vacuum_mqtt_topic,
     is_rand256_vacuum,
@@ -72,6 +74,86 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: ConfigEntry) -> boo
         # Optionally, trigger other reinitialization steps if needed
         hass.bus.async_fire(f"event_{DOMAIN}_reloaded", context=call.context)
 
+    async def vacuum_clean_zone(call: ServiceCall) -> None:
+        """Vacuum Go To Action"""
+        try:
+            # Retrieve coordinates
+            zone_lists = call.data.get("zone")
+            zone_ids = call.data.get("zone_ids")
+            repeats = call.data.get("repeats")
+
+            if zone_ids:
+                zone_lists = zone_ids
+
+            # Attempt to get entity_id or device_id
+            entity_ids = call.data.get("entity_id")
+            device_ids = call.data.get("device_id")
+
+            service_data = generate_service_data_clean_zone(
+                entity_id=entity_ids, device_id=device_ids, zones=zone_lists, repeat=repeats, hass=hass
+            )
+            if not service_data:
+                _LOGGER.warning("No Service data generated. Aborting!")
+                return
+            try:
+                await data_coordinator.connector.publish_to_broker(
+                    service_data["topic"],
+                    service_data["payload"],
+                )
+            except Exception as e:
+                _LOGGER.warning(f"Error sending command to vacuum: {e}")
+                return
+            hass.bus.async_fire(
+                f"event_{DOMAIN}.vacuum_clean_zone",
+                {
+                    "topic": service_data["topic"],
+                    "zones": zone_lists,
+                    "repeats": repeats,
+                },
+                context=call.context,
+            )
+        except KeyError as e:
+            _LOGGER.error(f"Missing required parameter: {e}")
+
+    async def vacuum_goto(call: ServiceCall) -> None:
+        """Vacuum Go To Action"""
+        try:
+            # Retrieve coordinates
+            spot_id = call.data.get("spot_id")
+            if not spot_id:
+                x_coord = call.data["x_coord"]
+                y_coord = call.data["y_coord"]
+                spot_id = None
+            else:
+                x_coord = None
+                y_coord = None
+
+            # Attempt to get entity_id or device_id
+            entity_ids = call.data.get("entity_id")
+            device_ids = call.data.get("device_id")
+
+            service_data = generate_service_data_go_to(
+                entity_ids, device_ids, x_coord, y_coord, spot_id, hass
+            )
+            if not service_data:
+                _LOGGER.warning("No Service data generated. Aborting!")
+                return
+            try:
+                await data_coordinator.connector.publish_to_broker(
+                    service_data["topic"],
+                    service_data["payload"],
+                )
+            except Exception as e:
+                _LOGGER.warning(f"Error sending command to vacuum: {e}")
+                return
+            hass.bus.async_fire(
+                f"event_{DOMAIN}.vacuum_go_to",
+                {"topic": service_data["topic"], "x": x_coord, "y": y_coord},
+                context=call.context,
+            )
+        except KeyError as e:
+            _LOGGER.error(f"Missing required parameter: {e}")
+
     async def reset_trims(call: ServiceCall) -> None:
         """Action Reset Map Trims."""
         _LOGGER.debug(f"Resetting trims for {DOMAIN}")
@@ -83,6 +165,8 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: ConfigEntry) -> boo
     hass.services.async_register(DOMAIN, "reset_trims", reset_trims)
     if not hass.services.has_service(DOMAIN, SERVICE_RELOAD):
         async_register_admin_service(hass, DOMAIN, SERVICE_RELOAD, _reload_config)
+    hass.services.async_register(DOMAIN, "vacuum_go_to", vacuum_goto)
+    hass.services.async_register(DOMAIN, "vacuum_clean_zone", vacuum_clean_zone)
 
     hass.data.setdefault(DOMAIN, {})
     hass_data = dict(entry.data)
@@ -100,14 +184,13 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: ConfigEntry) -> boo
     if not mqtt_topic_vacuum:
         raise ConfigEntryNotReady("MQTT was not ready yet, automatically retrying")
 
-    vacuum_topic = "/".join(mqtt_topic_vacuum.split("/")[:-1])
     is_rand256 = is_rand256_vacuum(vacuum_device)
 
-    data_coordinator = MQTTVacuumCoordinator(hass, entry, vacuum_topic, is_rand256)
+    data_coordinator = MQTTVacuumCoordinator(hass, entry, mqtt_topic_vacuum, is_rand256)
 
     hass_data.update(
         {
-            CONF_VACUUM_CONNECTION_STRING: vacuum_topic,
+            CONF_VACUUM_CONNECTION_STRING: mqtt_topic_vacuum,
             CONF_VACUUM_IDENTIFIERS: vacuum_device.identifiers,
             CONF_UNIQUE_ID: entry.unique_id,
             "coordinator": data_coordinator,
@@ -150,7 +233,8 @@ async def async_unload_entry(
         # Remove services
         hass.services.async_remove(DOMAIN, "reset_trims")
         hass.services.async_remove(DOMAIN, SERVICE_RELOAD)
-
+        hass.services.async_remove(DOMAIN, "vacuum_go_to")
+        hass.services.async_remove(DOMAIN, "vacuum_clean_zone")
     return unload_ok
 
 
