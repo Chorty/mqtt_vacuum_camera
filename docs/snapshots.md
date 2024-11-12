@@ -12,10 +12,10 @@ The Camera take a snapshot of the maps when the vacuum is "idle", "docked" or in
 It is possible to disable the PNG export from the camera options thanks [@gunjambi](https://github.com/gunjambi)
 as soon this option is OFF the PNG will be deleted from the WWW folder.
 
-![Screenshot 2024-03-13 at 17 19 15](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/3ab2558b-1ec6-4703-8024-2662d3637206)
+![Screenshot 2024-03-13 at 17 19 15](https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/3ab2558b-1ec6-4703-8024-2662d3637206)
 
 When the vacuum battery get empty because of an error during a cleaning cycle, or in different conditions as per the below example.
-If the option is enable will be possible to create an automation to send the screenshot to your mobile. 
+If the option is enable will be possible to create an automation to send the screenshot to your mobile.
 When using the below example HA editor please edit the automation in yaml because the snapshot attribute (used in this example)
 provides boolean values True or False.
 HA editor will translate to "True" (string) from the UI editor, home assistant will not notify you in this case.
@@ -48,7 +48,7 @@ mode: single
 *Aside the image, this function store also a zip file with diagnostic data, we filter the data relative to this integration from the HA logs and those data are stored only if the
 log debug function in HA is active ***(we don't store any data in the www folder if the you do not log the data and export them)***.
 
-![Screenshot 2023-10-03 at 06 55 36](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/6aedcdd3-6f39-4b11-8c0f-6da99f5490e9)
+![Screenshot 2023-10-03 at 06 55 36](https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/6aedcdd3-6f39-4b11-8c0f-6da99f5490e9)
 
 Once enabled the Debug log in the home assistant GUI home assistant collect the logs of the camera and other intregrations and add-on's in the instance.
 
@@ -67,13 +67,13 @@ Once enabled the Debug log in the home assistant GUI home assistant collect the 
 
 The filtered logs are in a zip file that will be created in the .storage of the home assistant, this file will be not acceseble on the .config folder unless you select the oprtion to export the logs from the Camera Options.
 
-![Screenshot 2024-01-26 at 10 01 40](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/4d4fb7e3-16a5-4994-9f61-ad71c50ddb61)
+![Screenshot 2024-01-26 at 10 01 40](https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/4d4fb7e3-16a5-4994-9f61-ad71c50ddb61)
 
 And then download it with the file editor of your coise or via SAMBA add-on.
 
-![Screenshot 2023-10-03 at 06 58 36](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/363881f5-bca6-462f-80d8-9a6351bcf285)
+![Screenshot 2023-10-03 at 06 58 36](https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/363881f5-bca6-462f-80d8-9a6351bcf285)
 
-The filtered logs will be as per the example below not containing other integrations or add-on logs such as androidtv, custom_components.localtuya (see above) only the custom_components.valetudo_vacuum_camera logs are exported.. 
+The filtered logs will be as per the example below not containing other integrations or add-on logs such as androidtv, custom_components.localtuya (see above) only the custom_components.valetudo_vacuum_camera logs are exported..
 
 ## Example Valetudo Camera log. ##
 ```log

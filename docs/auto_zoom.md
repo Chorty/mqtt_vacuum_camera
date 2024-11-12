@@ -7,7 +7,7 @@
 
 ***Category:*** Camera Configuration - Image Options - Auto Zoom
 
-![Screenshot 2024-03-13 at 17 14 10](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/390a5a85-3091-40b0-9846-c0bc9c6db93d)
+![Screenshot 2024-03-13 at 17 14 10](https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/390a5a85-3091-40b0-9846-c0bc9c6db93d)
 
 ***Default:***  Disable
 
@@ -15,11 +15,11 @@
 vacuum enters the room to clean the Camera will zoom the image on that room. The full zoom will change the aspect ratio of the image.
 Below exaple of how looks the dashboad when the ratio isn't locked.
 
-https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/99fc5b9b-20a5-4458-8f5c-1dda874a9da5
+https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/99fc5b9b-20a5-4458-8f5c-1dda874a9da5
 
 With the Lock Aspect Ratio function the image is displayed with the selected ratio (this is at orinal image ratio).
 
-https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/6930e76a-9c66-4f81-b824-003698160ffd
+https://github.com/chorty/valetudo_vacuum_camera/assets/82227818/6930e76a-9c66-4f81-b824-003698160ffd
 
 While auto zooming the segments the images will change aspect ratio if the lock aspect ratio is disabled.
 If enabled the aspect ratio will be kept and the image will be padded to fit the aspect ratio.

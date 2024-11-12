@@ -3,7 +3,7 @@ files_operations.py
 Common functions for the MQTT Vacuum Camera integration.
 Those functions are used to store and retrieve user data from the Home Assistant storage.
 The data will be stored locally in the Home Assistant in .storage/valetudo_camera directory.
-Author: @sca075
+Author: @chorty
 Version: 2024.08.1
 """
 
