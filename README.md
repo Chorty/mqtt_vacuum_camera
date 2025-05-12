@@ -1,12 +1,14 @@
 [releases_shield]: https://img.shields.io/github/release/sca075/mqtt_vacuum_camera.svg?style=popout
 [latest_release]: https://github.com/sca075/mqtt_vacuum_camera/releases/latest
+[releases]: https://github.com/sca075/mqtt_vacuum_camera/releases
+[downloads_total_shield]: https://img.shields.io/github/downloads/sca075/mqtt_vacuum_camera/total
 
 # MQTT Vacuum's Camera
 <p align="center">
   <img width="256" alt="logo@2x" src="https://github.com/sca075/mqtt_vacuum_camera/assets/82227818/0c623494-2844-4ed9-a246-0ad27f32503e">
 </p>
 
-## Current Release: [![GitHub Latest Release][releases_shield]][latest_release]
+## Current Release: [![GitHub Latest Release][releases_shield]][latest_release] [![GitHub All Releases][downloads_total_shield]][releases]
 
 ![Screenshot 2023-12-27 at 13 37 57](https://github.com/sca075/valetudo_vacuum_camera/assets/82227818/4f1f76ee-b507-4fde-b1bd-32e6980873cb)
 
@@ -24,6 +26,10 @@ This custom component is simple to install and setup, decode and render the vacu
 When you want also to control your vacuum you will need to also install the:
 [lovelace-xiaomi-vacuum-map-card (recommended)](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card) from HACS as well.
 
+### 🔗 Related Repositories
+
+- [Valetudo Map Extractor (library for extracting the maps)](https://github.com/sca075/Python-package-valetudo-map-parser)
+
 ### Goal of this project.
 The goal of this project is to deliver an out-of-the-box solution for integrating MQTT-based vacuums into the Home Assistant ecosystem. 
 This includes real-time map extraction, sensor data (when not provided), and control services (not available by default)
@@ -38,15 +44,18 @@ We can now see the Obstacles Images when available, and somehow we start to orga
 The camera is stable and updated to all requirements of Home Assistant.
 Will be also time to take a brake and work in the background, so I do not expect unless required releases in January.
 
-#### 2025.2.0 - **Refactoring and some add**
+#### 2025.5.0 - **Refactoring and New Additions**
 - **Changes**
-  - Exporting libraries to PyPi to reduce the code lines.
-  - Refactoring the code to make it more readable and easy to maintain.
-  - Fully Coordinated implementation of the cameras and sensors.
-  - Remove files operations (not for logging).
-- **Features:**
-  - Added on 2024.11.0 the Actions for Rand256 to load and save maps fully integrate [MapLoader](https://github.com/pkoehlers/maploader).
-
+  - Refactored the code to improve readability and maintainability.
+  - Remove file operation routines not required for logging export.
+- **Features / Improvements :**
+  - Enable loading and saving of maps via services by fully integrating with  [MapLoader](https://github.com/pkoehlers/maploader).
+  - Enable selection of specific elements to display on the map..
+  - Add options for Area and Floor management.
+- **Potential Fixes:**
+  - Fix the issue where the absence of a map causes the camera to malfunction.
+  - Fix the alpha colours of the elements.
+  - Implement a fully coordinated integration of the cameras and sensors.
 </details>
 
 
@@ -122,6 +131,6 @@ For further details on how the camera operates and how you can contribute, refer
 - [@Skeletorjus](https://github.com/Skeletorjus) that using this integration gave us several ideas to improve it.
 - [@rohankapoorcom](https://github.com/rohankapoorcom) autor of the v1.4.0 that make really easy to set up this integration.
 - [@gunjambi](https://github.com/gunjambi) that found a solution to re-draw the robot and also implemented the snapshots png to be enabled or disabled from the options.
-- [@T0ytoy](https://github.com/T0ytoy) for the amazing cooperation in testing our Camera that improved [using the threading](https://github.com/sca075/valetudo_vacuum_camera/discussions/71).
-- [@borgqueenx](https://github.com/borgqueenx) for the amazing cooperation in testing our Camera and helping us to improve it, [see more here](https://github.com/sca075/mqtt_vacuum_camera/discussions/296#:~:text=Edit-,borgqueenx,-2%20weeks%20ago)
+- [@T0ytoy](https://github.com/T0ytoy) for the superb cooperation in testing our Camera that improved [using the threading](https://github.com/sca075/valetudo_vacuum_camera/discussions/71).
+- [@borgqueenx](https://github.com/borgqueenx) for the great cooperation in testing our Camera and helping us to improve it, [see more here](https://github.com/sca075/mqtt_vacuum_camera/discussions/296#:~:text=Edit-,borgqueenx,-2%20weeks%20ago)
 - And to all of you using this integration and reporting any issues, improvements and vacuums used with it.

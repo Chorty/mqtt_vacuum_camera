@@ -1,4 +1,4 @@
-"""Snapshot Version 2024.10.0"""
+"""Snapshot Version: 2025.3.0b0"""
 
 import asyncio
 from asyncio import gather, get_event_loop
@@ -51,7 +51,7 @@ class Snapshots:
         # Save the users languages data if the Camera is the first run
         if self._first_run:
             self._first_run = False
-            _LOGGER.info(f"Writing {self.file_name} users languages data.")
+            _LOGGER.info("Writing %s users languages data.", self.file_name)
             await async_populate_user_languages(self.hass)
         await self._store_all.async_set_vacuum_json(self.file_name, json_data)
         try:
@@ -71,16 +71,17 @@ class Snapshots:
             _LOGGER.warning(f"Error Saving {self.file_name}: Snapshot image, {str(e)}")
 
     def process_snapshot(self, json_data: Any, image_data: PilPNG):
-        """Async function to thread the snapshot process."""
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+        """Process the snapshot.
+
+        This is a synchronous wrapper around the async snapshot function,
+        designed to be called from a thread pool.
+        """
+        # Use asyncio.run which properly manages the event loop lifecycle
         try:
-            result = loop.run_until_complete(
-                self.async_take_snapshot(json_data, image_data)
-            )
-        finally:
-            loop.close()
-        return result
+            return asyncio.run(self.async_take_snapshot(json_data, image_data))
+        except Exception as e:
+            _LOGGER.error("Error in process_snapshot: %s", str(e), exc_info=True)
+            return None
 
     async def run_async_take_snapshot(self, json_data: Any, pil_img: PilPNG) -> None:
         """Thread function to process the image snapshots."""
