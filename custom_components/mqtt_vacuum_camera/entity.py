@@ -38,6 +38,7 @@ from .snapshots.snapshot import Snapshots
 from .utils.thread_pool import TaskQueue
 from .utils.camera.obstacle_handler import ObstacleViewHandler
 
+
 class MQTTVacuumCoordinatorEntity(CoordinatorEntity[CameraCoordinator]):
     """
     MQTT Vacuum Camera Entity.
@@ -45,8 +46,6 @@ class MQTTVacuumCoordinatorEntity(CoordinatorEntity[CameraCoordinator]):
     Coordinator handles all processing (MQTT → JSON → PIL).
     Camera just handles PIL → bytes conversion and display.
     """
-
-
 
     def __init__(
         self, coordinator: CameraCoordinator, device_info: dict[str, Any]

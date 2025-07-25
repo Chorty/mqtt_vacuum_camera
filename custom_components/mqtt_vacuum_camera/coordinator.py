@@ -202,7 +202,6 @@ class CameraCoordinator(DataUpdateCoordinator[VacuumData]):
         # Initialize thread pools (keep existing stable code)
         self.thread_pool = ThreadPoolManager(self.file_name)
 
-
         # Initialize decompression (from working code)
         self.decompression_manager = DecompressionManager.get_instance(self.file_name)
 
@@ -265,7 +264,6 @@ class CameraCoordinator(DataUpdateCoordinator[VacuumData]):
             LOGGER.debug("Camera manual update pushed: %s", self.file_name)
             return self.async_set_updated_data(VacuumData(camera=data))
         return None
-
 
     async def async_should_stream(self) -> bool:
         """Determine if camera should stream based on vacuum state and new data."""
