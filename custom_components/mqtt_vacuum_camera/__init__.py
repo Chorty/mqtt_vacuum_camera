@@ -1,6 +1,6 @@
 """
 MQTT Vacuum Camera.
-Version: 2025.07.0
+Version: 2025.07.1
 """
 
 from functools import partial
@@ -54,7 +54,7 @@ from .utils.vacuum.mqtt_vacuum_services import (
     is_rand256_vacuum,
 )
 
-PLATFORMS = [Platform.CAMERA, Platform.SENSOR]
+PLATFORMS = [Platform.CAMERA, Platform.SENSOR, Platform.IMAGE]
 
 
 def init_shared_data(
@@ -149,7 +149,7 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: ConfigEntry) -> boo
         hass.services.async_register(
             DOMAIN, "obstacle_view", partial(obstacle_view, hass=hass)
         )
-        await async_register_vacuums_services(hass, data_coordinators)
+        await async_register_vacuums_services(hass, data_coordinators["camera"])
     # Registers update listener to update config entry when options are updated.
     unsub_options_update_listener = entry.add_update_listener(options_update_listener)
     # Store a reference to the unsubscribe function to clean up if an entry is unloaded.
@@ -157,10 +157,10 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: ConfigEntry) -> boo
     hass.data[DOMAIN][entry.entry_id] = hass_data
     if bool(hass_data.get("is_rand256")):
         await hass.config_entries.async_forward_entry_setups(
-            entry, ["camera", "sensor"]
+            entry, ["camera", "sensor", "image"]
         )
     else:
-        await hass.config_entries.async_forward_entry_setups(entry, ["camera"])
+        await hass.config_entries.async_forward_entry_setups(entry, ["camera", "image"])
 
     return True
 
